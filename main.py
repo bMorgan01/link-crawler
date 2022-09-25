@@ -1,9 +1,7 @@
-import http
 import bs4
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError
 from urllib.parse import urlparse, urlunparse, urljoin
-import re
 
 
 def spider(target, exclude):
@@ -15,7 +13,10 @@ def spider_rec(page_links, current_href, base_parse, exclude):
     target_url = urlunparse(base_parse)
     parse_result = urlparse(urljoin(target_url, current_href))
     req = Request(urlunparse(parse_result))
+
     postfix = parse_result.path
+    if parse_result.query:
+        postfix += "?" + parse_result.query
     
     if len(postfix) == 0:
         postfix = "/"
@@ -31,11 +32,15 @@ def spider_rec(page_links, current_href, base_parse, exclude):
             for link in soup.findAll('a'):
                 href = link.get('href')
                 href = href.replace(" ", "%20")
-                
-                if not urlparse(href).hostname:
-                    href = urlparse(urljoin(target_url, href)).path         
-                
+
                 if "mailto:" not in href:
+                    if not urlparse(href).hostname:
+                        href_parse = urlparse(urljoin(target_url, href))
+                        href = href_parse.path
+
+                        if href_parse.query:
+                            href += "?" + href_parse.query
+
                     page_links[postfix].append(href)
 
                     if href not in page_links.keys():
