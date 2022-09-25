@@ -40,10 +40,18 @@ def spider_rec(page_links, current_href, base_parse, exclude):
 
                         if href_parse.query:
                             href += "?" + href_parse.query
+                    
+                    if href not in page_links[postfix]:
+                        page_links[postfix].append(href)
+                    
+                    found = False
+                    for key in page_links.keys() - [postfix]:
+                        for link in page_links[key]:
+                            if href == key or href == link:
+                                found = True
+                                break
 
-                    page_links[postfix].append(href)
-
-                    if href not in page_links.keys():
+                    if not found:
                         found = False
                         for d in exclude:
                             if d in href:
@@ -55,7 +63,10 @@ def spider_rec(page_links, current_href, base_parse, exclude):
 
                         spider_rec(page_links, href, base_parse, exclude)
     except HTTPError as e:
-        page_links[postfix] = e
+        if parse_result.hostname == base_parse.hostname:
+            page_links[postfix] = e
+        else:
+            page_links[current_href] = e
 
     return page_links
 
