@@ -92,7 +92,7 @@ def main():
     for key in pages.keys():
         testedLinks += pages[key] + [key]
     testedLinks = list(set(testedLinks))
-    print(f"Tested {len(testedLinks)} links.\n")
+    print(f"Tested {len(testedLinks)} links.")
 
     count = 0
     for link in pages.keys():
@@ -106,7 +106,7 @@ def main():
                         if href == link:
                             found.append(search_link)
 
-            print(''.join(['='] * 100))
+            print('\n', ''.join(['='] * 100))
             print(link, pages[link].status, pages[link].reason)
             print(''.join(['-'] * 100))
             print("Found in:")
@@ -114,7 +114,7 @@ def main():
             for href in found:
                 print(href)
 
-            print(''.join(['='] * 100), "\n")
+            print(''.join(['='] * 100))
 
     print("Done.")
 
