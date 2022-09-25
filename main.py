@@ -1,3 +1,4 @@
+import configparser
 import bs4
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError
@@ -74,15 +75,12 @@ def spider_rec(page_links, current_href, base_parse, exclude):
 def main():
     print("Reading conf...")
 
-    conf = []
-    with open('crawl.conf', 'r') as file:
-        for line in file.readlines():
-            line = line.replace("\n", "")
-            line = line.replace("\r", "")
-            conf.append(line)
+    config = configparser.ConfigParser()
+    config.read('crawl.conf')
+    config = config['Config']
 
-    target = conf[1]
-    ignores = conf[3:]
+    target = config['site']
+    ignores = config['ignore'].split(', ')
 
     print("Crawling site...")
     pages = spider(target, ignores)
