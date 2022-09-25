@@ -90,7 +90,11 @@ def main():
 
     testedLinks = []
     for key in pages.keys():
-        testedLinks += pages[key] + [key]
+        testedLinks += [key]
+
+        if type(pages[key]) != HTTPError:
+            testedLinks += pages[key]
+    
     testedLinks = list(set(testedLinks))
     print(f"Tested {len(testedLinks)} links.")
 
@@ -106,7 +110,7 @@ def main():
                         if href == link:
                             found.append(search_link)
 
-            print('\n', ''.join(['='] * 100))
+            print('\n' + ''.join(['='] * 100))
             print(link, pages[link].status, pages[link].reason)
             print(''.join(['-'] * 100))
             print("Found in:")
