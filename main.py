@@ -64,10 +64,11 @@ def spider_rec(page_links, current_href, base_parse, exclude):
 
                         spider_rec(page_links, href, base_parse, exclude)
     except HTTPError as e:
-        if parse_result.hostname == base_parse.hostname:
-            page_links[postfix] = e
-        else:
-            page_links[current_href] = e
+        if e.code == 400 or e.code in range(404, 500):
+            if parse_result.hostname == base_parse.hostname:
+                page_links[postfix] = e
+            else:
+                page_links[current_href] = e
 
     return page_links
 
