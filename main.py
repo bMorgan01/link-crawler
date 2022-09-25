@@ -86,6 +86,14 @@ def main():
     print("Crawling site...")
     pages = spider(target, ignores)
 
+    print(f"Crawled {len(pages)} pages.\n")
+
+    testedLinks = []
+    for key in pages.keys():
+        testedLinks += pages[key]
+    testedLinks = list(set(testedLinks))
+    print(f"Tested {len(testedLinks)} links.")
+
     count = 0
     for link in pages.keys():
         if type(pages[link]) == HTTPError:
