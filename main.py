@@ -86,13 +86,13 @@ def main():
     print("Crawling site...")
     pages = spider(target, ignores)
 
-    print(f"Crawled {len(pages)} pages.\n")
+    print(f"Crawled {len(pages)} pages.")
 
     testedLinks = []
     for key in pages.keys():
-        testedLinks += pages[key]
+        testedLinks += pages[key] + [key]
     testedLinks = list(set(testedLinks))
-    print(f"Tested {len(testedLinks)} links.")
+    print(f"Tested {len(testedLinks)} links.\n")
 
     count = 0
     for link in pages.keys():
